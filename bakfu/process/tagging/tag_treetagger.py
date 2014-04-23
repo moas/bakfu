@@ -76,6 +76,7 @@ class TreeTagger(BaseProcessor):
                 buffer = []
             else:
                 buffer.append(tag)
+        tagged_data.append(buffer)
 
         result = tagged_data
 
