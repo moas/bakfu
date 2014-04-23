@@ -108,7 +108,6 @@ class Processor(object):
         if len(init_args) == 0:
             init_args = args
 
-        print("init",init_kwargs)
         obj = cls(*init_args, **init_kwargs)
 
 

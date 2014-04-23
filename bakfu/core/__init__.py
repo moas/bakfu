@@ -1,17 +1,34 @@
 # -*- coding: utf-8 -*-
 from .routes import get_processor
 
+LANGUAGES = {
+    'en':'english',
+    'fr':'french',
+    'de':'german',
+    }
 
 class Chain(object):
     '''
-    I guess I shouldn't call this a dragon but ...
     This class can be used to manage data : loading, tagging, classifying...
+    Pretty much everything you do should start here.
+    
+    :Example:
+    
+    >>> import bakfu
+    >>> baf = bakfu.Chain()
+    >>> baf.load("data.simple",())
+    
     '''
     def __init__(self, *args, **kwargs):
         self.data_sources = []
         self.chain = []
         self.base_data = None
         self.data = {}
+
+        #Defaults language to english ; set both short/long forms
+        lang = kwargs.get('lang','en')
+        self.data['lang'] = lang
+        self.data['language'] = LANGUAGES.get(lang,'english')
 
     def process(self, processor_name, *args, **kwargs):
         '''Process data.'''
@@ -63,114 +80,10 @@ class Chain(object):
         return self.chain[-1]
 
     def __repr__(self):
-       chain_str = u' → '.join([str(elt) for elt in self.chain])
+       chain_str = u' -> '.join([str(elt) for elt in self.chain])
        return u'Chain : \n{chain}'.format(chain=chain_str)
 
 __all__ = ['Chain',
            'get_processor',
            ]
 
-
-'''
-exec(open("../README").read())
-
-import nltk.corpus
-
-stopwords= nltk.corpus.stopwords.words('french')
-
-from bakfu.core import Chain
-kd = Chain()
-data=((0,'Test'),(1,'Autre test'))
-kd.load('data.simple',data)
-kd.load('data.rest',url="http://0.0.0.0:20001/fortunes/list",key="text")
-
-kd.process('vectorize.sklearn')
-
-kd=Chain().load('data.simple',data_tuples)
-.process('vectorize.sklearn',ngram_range=(1,5))
-.data
-
-
-def tokenizer(x):
-    def isok(f):
-        if len(f)<4:return False
-        if f in stopwords:return False
-        return True
-    x=x.replace("."," ")    
-    features = x.split(' ')
-    features = [f for f in features if isok(f)]
-    return features
-
-#Chain().load('data.simple',data)
-.process('vectorize.sklearn',_init={'ngram_range':(2,5)}).data
-
-data=data_tuples
-D=Chain().load('data.simple',data)    \
-    .process('vectorize.sklearn',    \
-    _init=((),{
-        'ngram_range':(1,3),
-        'min_df':2,
-        'max_features':50,
-        'stop_words':stopwords,
-        'tokenizer':tokenizer,
-        }),\
-    _run=((),{}))
-    
-D.data['vectorizer'].get_feature_names()
-
-D.process('cluster.ward')
-D.process('cluster.spectral')
-
-Chain()
-.load('data.simple',data_tuples)
-.process('vectorize.sklearn',ngram_range=(1,5)).data
-
-D=Chain().load('data.redis',_init=((),{'keyname':'data1_3'}))
-
-
-krom
-pip install pytest-cov
-py.test --cov bakfu
-coverage run --source bakfu -m py.test   ?
-coverage report
-py.test --cov bakfu test --cov-report=html 
-
-
-pycme : python classification made easy
-dame
-
-
-
-
-
-
-
-
-
-
-
-
-
-exec(open("../README").read())
-from bakfu.core import Chain
-import nltk.corpus
-stopwords= nltk.corpus.stopwords.words('french')
-from bakfu.core import Chain
-kd=Chain().load('data.simple',data_tuples)
-.process('vectorize.sklearn',ngram_range=(1,5)).process('cluster.ward')
-
-
-kd.process('cluster.ward')
-
-
-kd=bakfu.Chain()
-kd.load('data.xml.ms',file="/home/plloret/OldSeminars/2014/2014-02-florette/export (11).xml",title='Fluide',targets=True)
-
-
-
-D.process('cluster.spectral')
-
-
-
-
-'''

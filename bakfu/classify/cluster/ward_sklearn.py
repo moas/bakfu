@@ -32,7 +32,6 @@ class WardClusterizer(BaseClusterizer):
         return result
 
     def run(self, caller, *args, **kwargs):
-        print("WardClusterizer.run")
         data_source = caller.data['main_data']
         vectorizer_result = caller.data['vectorizer_result']
 
