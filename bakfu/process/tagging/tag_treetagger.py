@@ -55,7 +55,8 @@ class TreeTagger(BaseProcessor):
         TODO:CLEAN UP 
         '''
         super(TreeTagger, self).run(caller, *args, **kwargs)
-        data_source = caller.get_chain('main_data')
+
+        data_source = caller.get_chain('data_source')
         self.caller=caller
 
         cur_data = data_source.get_data()
@@ -104,8 +105,10 @@ class TreeTagger(BaseProcessor):
         #note: data now contains lists of tokens instead of sentences
         uids = data_source.get_uids()
         new_data = zip(uids,data_clean)
-        data_source.data = new_data
-        data_source.meta_data = {"tokenized":True}
+
+        #Assign processed data to a new data source
+        new_data_source = self.caller.load("data.simple",new_data)
+        new_data_source.meta_data = {"tokenized":True}
 
         self._data.update(
             {'result':result,

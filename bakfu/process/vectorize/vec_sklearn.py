@@ -50,10 +50,9 @@ class CountVectorizer(BaseVectorizer):
 
     def run(self, caller, *args, **kwargs):
         super(CountVectorizer, self).run(caller, *args, **kwargs)
-        data_source = caller.get_chain('main_data')
+        data_source = caller.get_chain('data_source')
 
         #obj.run(*args, **kwargs)
-        #import pdb;pdb.set_trace();
         result = self.vectorizer.fit_transform(data_source.get_data())
         self.results = {'vectorizer':self.vectorizer, 'data':result}
 

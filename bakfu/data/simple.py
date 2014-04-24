@@ -39,4 +39,5 @@ class SimpleDataSource(BaseDataSource):
 
     def run(self, caller, data, *args, **kwargs):
         self.data = data
+        self._data = {'main_data':data,'data':data,'data_source':self}
         return self
