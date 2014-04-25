@@ -48,6 +48,13 @@ class Chain(object):
             self.data['main_data'] = processor
         return self
 
+    def load_unchained(self, processor_name, *args, **kwargs):
+        '''Load data.'''
+
+        processor = self.run_processor(processor_name, *args, **kwargs)
+        self.data_sources.append(processor)
+        return processor
+
     def run_processor(self, processor_name, *args, **kwargs):
         '''
         TODO?  :
@@ -62,7 +69,8 @@ class Chain(object):
             previous = self
 
         processor = processor_class.init_run(self, previous, *args, **kwargs)
-        processor._prev = previous
+        if not processor._prev: 
+            processor._prev = previous
         previous._next = processor
 
         return processor

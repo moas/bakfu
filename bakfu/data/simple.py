@@ -38,6 +38,8 @@ class SimpleDataSource(BaseDataSource):
         self._data['data'] = data
 
     def run(self, caller, data, *args, **kwargs):
+        super(SimpleDataSource, self).run(caller, *args, **kwargs)
+        
         self.data = data
         self._data = {'main_data':data,'data':data,'data_source':self}
         return self

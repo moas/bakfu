@@ -107,12 +107,13 @@ class TreeTagger(BaseProcessor):
         new_data = zip(uids,data_clean)
 
         #Assign processed data to a new data source
-        new_data_source = self.caller.load("data.simple",new_data)
+        new_data_source = self.caller.load_unchained("data.simple",new_data)
+
         new_data_source.meta_data = {"tokenized":True}
 
         self._data.update(
             {'result':result,
              'tagger_result':result,
+             'data_source':new_data_source,
             })
-
         return self

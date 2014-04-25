@@ -45,3 +45,20 @@ def test_core_data():
     
 
 
+def test_core_data_chain():
+    '''
+    When overriding data the last data should be used.
+    '''
+    data = ((0,'0'), (1,'1'), )
+    data_new = ((0,"new"),(1,"new"))
+
+    test_subject = Chain()
+    test_subject.load('data.simple',data)
+    assert test_subject.get_chain('data_source').data == data
+    test_subject.load('data.simple',data_new)
+    assert test_subject.get_chain('data_source').data == data_new
+    
+
+
+
+
