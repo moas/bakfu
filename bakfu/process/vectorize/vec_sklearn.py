@@ -36,7 +36,7 @@ class CountVectorizer(BaseVectorizer):
 
     def vectorize(self, data_source, *args, **kwargs):
         '''
-        Calls fit_transform or transform. 
+        Calls fit_transform or transform.
         '''
         # If vectorizer has already been use, reuse it for the new data set
         if hasattr(self.vectorizer, 'vocabulary_'):
@@ -60,9 +60,11 @@ class CountVectorizer(BaseVectorizer):
         caller.data['result'] = result
         caller.data['vectorizer_result'] = result
 
-        self._data.update(
-            {'result':result,
-            'vectorizer':self.vectorizer,})
+        self.update(
+            result=result,
+            vectorizer_result=result,
+            vectorizer=self.vectorizer
+            )
 
         return self
 

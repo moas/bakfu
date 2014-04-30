@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 '''
+tag_treetagger.py
+
+This module is a wrapper to TreeTagger.
 
 '''
 
@@ -30,8 +33,8 @@ class TreeTagger(BaseProcessor):
     >>>baf.load("data.simple",DATA)
     >>>baf.process('tagging.treetagger')
     >>>baf.process('vectorize.sklearn',
-    ...        min_df = 2, 
-    ...        ngram_range=(1, 3), 
+    ...        min_df = 2,
+    ...        ngram_range=(1, 3),
     ...        #stop_words=nltk.corpus.stopwords.words(baf.get('language')),
     ...        max_features=100,
     ...        tokenizer=lambda x:x,
@@ -52,7 +55,7 @@ class TreeTagger(BaseProcessor):
 
     def run(self, caller, *args, **kwargs):
         '''
-        TODO:CLEAN UP 
+        TODO:CLEAN UP
         '''
         super(TreeTagger, self).run(caller, *args, **kwargs)
 
@@ -63,7 +66,11 @@ class TreeTagger(BaseProcessor):
 
         #run treetagger
         text = string.join(cur_data,DELIMITER_NL)
-        tagger = treetaggerwrapper.TreeTagger(TAGLANG=caller.get('lang'),TAGDIR='/home/plloret/dev/ms/treetag/',        TAGINENC='utf-8',TAGOUTENC='utf-8')
+        tagger = treetaggerwrapper.TreeTagger(
+            TAGLANG=caller.get('lang'),
+            TAGDIR='/home/plloret/dev/ms/treetag/',#TODO : remove hard path
+            TAGINENC='utf-8',TAGOUTENC='utf-8')
+
         tags = tagger.TagText(text)
 
         #process treetagger output
@@ -72,7 +79,8 @@ class TreeTagger(BaseProcessor):
         for tag in tags:
             tag = tag.split("\t")
             if tag[0]==DELIMITER:
-                buffer = [ (a,b,c if c!='<unknown>' else a) for a,b,c in buffer]
+                buffer = [ (a, b, c if c != '<unknown>' else a) 
+                           for a, b, c in buffer]
                 tagged_data.append(buffer)
                 buffer = []
             else:
@@ -82,32 +90,32 @@ class TreeTagger(BaseProcessor):
         result = tagged_data
 
         caller.data['result'] = result
- 
+
         # Remove data according to filtered tags ;
         FILTER_TAGS = ('SENT', 'KON', 'PUN','DT')
-        
+
         data_clean = [
             filter(
                 lambda x:x[1] not in FILTER_TAGS
-                ,line) 
+                , line)
             for line in tagged_data]
 
         data_clean = [
             filter(
-                lambda x:len(x[2])>2
-                ,line) 
+                lambda x:len(x[2]) > 2
+                , line)
             for line in data_clean]
 
         #remove tags ; only keep cannonical form
-        data_clean = [[ d[2] for d in line] for line in data_clean]
+        data_clean = [[d[2] for d in line] for line in data_clean]
 
         #reformat data to ((id,data),...)
         #note: data now contains lists of tokens instead of sentences
         uids = data_source.get_uids()
-        new_data = zip(uids,data_clean)
+        new_data = zip(uids, data_clean)
 
         #Assign processed data to a new data source
-        new_data_source = self.caller.load_unchained("data.simple",new_data)
+        new_data_source = self.caller.load_unchained("data.simple", new_data)
 
         new_data_source.meta_data = {"tokenized":True}
 
