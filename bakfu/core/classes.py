@@ -109,7 +109,7 @@ class Processor(object):
             init_args = args
 
         obj = cls(*init_args, **init_kwargs)
-
+        obj._prev = predecessor
 
         if '_run' in kwargs:
             run_args, run_kwargs = get_args_and_kwargs(kwargs.pop('_run'))
@@ -159,4 +159,4 @@ class Processor(object):
           return self.registered_name
       except:
           return object.__repr__(self)
-   
+
