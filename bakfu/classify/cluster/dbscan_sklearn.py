@@ -24,9 +24,6 @@ class DBSCANClusterizer(BaseClusterizer):
         '''
 
         '''
-
-
-        #self.result = {'clusters':result}
         self.data['result'] = 42
 
         return result
