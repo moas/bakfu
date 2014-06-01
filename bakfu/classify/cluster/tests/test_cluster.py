@@ -33,20 +33,24 @@ def test_cluster_ncluster():
     We test if 3 sets of data are clustered into 3 sets.
     n_clusters is specified.
     '''
+    CLASSIFIERS = ('cluster.ward', 'cluster.spectral')
+
     G1 = 'First set'
     G2 = 'Second group'
     G3 = 'Third cluster'
     data = enumerate((G1,G1,G1,G2,G2,G2,G3,G3,G3))
-    
-    baf = Chain().load('data.simple',data) \
+    data = list(data)
+
+    for classifier in CLASSIFIERS:
+        baf = Chain().load('data.simple',data) \
                  .process('vectorize.sklearn') \
-                 .process('cluster.ward', n_clusters=3)
+                 .process(classifier, n_clusters=3)
     
-    result = baf.get_chain('result')
+        result = baf.get_chain('result')
 
 
-    assert result[0] == result[1] == result[2]
-    assert result[3] == result[4] == result[5]
-    assert result[6] == result[7] == result[8]
+        assert result[0] == result[1] == result[2]
+        assert result[3] == result[4] == result[5]
+        assert result[6] == result[7] == result[8]
 
-    assert len(set(result)) == 3
+        assert len(set(result)) == 3
