@@ -1,4 +1,4 @@
 numpy
 scipy
 scikit-learn 
-six
+six>=1.6.1
