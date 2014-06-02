@@ -49,7 +49,8 @@ class TreeTagger(BaseProcessor):
     run_args = ()
     run_kwargs = ()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, tagdir,*args, **kwargs):
+        self.tagdir = tagdir
         super(TreeTagger, self).__init__(*args, **kwargs)
 
 
@@ -68,7 +69,7 @@ class TreeTagger(BaseProcessor):
         text = string.join(cur_data,DELIMITER_NL)
         tagger = treetaggerwrapper.TreeTagger(
             TAGLANG=caller.get('lang'),
-            TAGDIR='/home/plloret/dev/ms/treetag/',#TODO : remove hard path
+            TAGDIR= self.tagdir,
             TAGINENC='utf-8',TAGOUTENC='utf-8')
 
         tags = tagger.TagText(text)
